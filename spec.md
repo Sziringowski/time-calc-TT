@@ -98,7 +98,7 @@
     <td>font_type</td>
     <td>choice</td>
     <td>categorial</td>
-    <td>антиква<br>гротеск<br>разностильный<br>рукописный<br>лого</td>
+    <td>антиква (antiqua)<br>гротеск (grotesque)<br>разностильный (mixed)<br>рукописный (handwritten)<br>лого (logo)</td>
   </tr>
   <tr>
     <td>есть ли наклонное начертание</td>
@@ -119,7 +119,7 @@
     <td>calc_type</td>
     <td>choice</td>
     <td>categorial</td>
-    <td>новый<br>обновление<br>тех обновление<br>лого<br>кастом<br>кириллизация</td>
+    <td>новый (new)<br>обновление (upd)<br>тех обновление (tech_upd)<br>лого (logo)<br>кастом (custom)<br>кириллизация (cyrillization)</td>
   </tr>
 </table>
 
