@@ -26,6 +26,8 @@ doc = {
 }
 
 # определим имена по умолчанию для атрибутов
+# формат: ../sys_attribute_name: default_name
+
 default_names = {
     'features': {
         'categorial': {
@@ -48,6 +50,22 @@ default_names = {
         't_hint': "хинтинг"
     }
 }
+# определим названия по умолчанию для значений полей записей (определяется только дле не числовых атрибутов)
+# формат: ../sys_attribute_name/sys_value_name: default_values
+
+default_values = {
+    'features': {
+        'categorial': {
+            'font_type': {
+                "antiqua": "антиква", 'grotesque': "гротеск", 'mixed': "разностильные шрифты", 'handwritten': "рукописный шрифт", 'logo': "логотип"
+            },
+            'calc_type': {
+                "new": "новый", 'upd':  "UPD", 'tech_upd': "тех UPD", 'logo': "лого", 'custom': "кастом", 'cyrillization': "кириллизация"
+            }
+        }
+    }
+}
+
 
 combines_of_cat_features = np.array(list(itertools.product(
          *(doc["features"]["categorial"].values()) 

@@ -5,7 +5,7 @@ import numpy as np
 import documentation as doc
 import uuid
 
-def read(patch = 'C:/time-calc-TT/source/for_calc.xlsx', names = doc.default_names) -> dict:
+def read(patch = 'C:/time-calc-TT/source/for_calc.xlsx', names = doc.default_names, values = doc.default_values) -> dict:
     '''
     patch - путь до файла с .xlsx таблицой
     name - JSON-объект, устанавливающий наименования фичей и таргетов в .xlsx файле 
@@ -17,12 +17,24 @@ def read(patch = 'C:/time-calc-TT/source/for_calc.xlsx', names = doc.default_nam
     data = data[cat_names+num_names+targets_names]
     data = data.rename(columns=dict(zip(cat_names+num_names+targets_names, cat_names_doc+num_names_doc+target_names_doc)))
     data.index = [str(uuid.uuid4()) for _ in range(len(data))]  # генерим сложные случайные ключи
+
+    # заменяем дефолтные имена/значения на системные
     data["is_italic"] = data["is_italic"].replace({"есть": 1, "нет": 0}).infer_objects(copy=False)
-    data["font_type"] = data["font_type"].replace({"антиква": 'antiqua', "гротеск": 'grotesque', "разностильные шрифты": 'mixed', "рукописный шрифт": 'handwritten',"логотип": 'logo'}).infer_objects(copy=False)
-    data["calc_type"] = data["calc_type"].replace({"новый": 'new', "UPD": 'upd', "тех UPD": 'tech_upd', "лого": 'logo', "кастом": 'custom', "кириллизация": 'cyrillization'}).infer_objects(copy=False)
+    data["font_type"] = data["font_type"].replace(dict(zip(
+        values["features"]["categorial"]["font_type"].values(),
+        values["features"]["categorial"]["font_type"].keys()
+        ))).infer_objects(copy=False)
+    data["calc_type"] = data["calc_type"].replace(dict(zip(
+        values["features"]["categorial"]["calc_type"].values(),
+        values["features"]["categorial"]["calc_type"].keys()
+    ))).infer_objects(copy=False)
+
+    # валидация
     for index, row in data[target_names_doc].iterrows():        
         if all(list(pd.isna(row))):
             data.drop(index=index,inplace=True)  # удаляем записи, если таргет вектор пуст
+
+    # разделение даты
     categorial_features = data[cat_names_doc]
     numerical_features = data[num_names_doc]
     targets = data[target_names_doc]
@@ -41,8 +53,8 @@ def correlation_matrix(data: pd.DataFrame):
     draws correlation matrix
     '''
     correlation_matrix = data.corr()
-    plt.figure(figsize=(6, 6))
-    hmap = sns.heatmap(correlation_matrix, annot=False, fmt='.2f', cmap='coolwarm', square=True)
+    plt.figure(figsize=(8, 8))
+    hmap = sns.heatmap(correlation_matrix, annot=True, fmt='.2f', cmap='coolwarm', square=True)
     hmap.set_xticklabels(hmap.get_xmajorticklabels(), rotation=90)
     hmap.set_yticklabels(hmap.get_ymajorticklabels(), rotation=0)
     plt.title('correlation matrix')
